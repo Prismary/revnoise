@@ -7,12 +7,6 @@ mapdata = {}
 map_min = -16
 map_max = 16
 
-# Generate a fitting spacer
-spacer_len = (map_min * -1 + map_max) * 2
-spacer = ''
-for i in range(0, spacer_len+2):
-	spacer = spacer + '═'
-
 
 def show_map(passdata):
 	# Characters used for printing the map to the shell
@@ -25,7 +19,7 @@ def show_map(passdata):
 
 		print(lineout)
 
-	print(spacer)
+	print('═' * ((abs(map_min) + map_max) * 2))
 
 def initial_rng():
 	return random.randrange(0, 2)
