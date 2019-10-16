@@ -58,8 +58,6 @@ for x in range(map_min, map_max+1):
 	for y in range(map_min, map_max+1):
 		mapdata[str(x)+'|'+str(y)] = initial_rng()
 
-print(mapdata)
-
 show_map(mapdata)
 
 # Revisions
