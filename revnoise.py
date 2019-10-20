@@ -9,7 +9,7 @@ map_max = 16
 
 
 def show_map(passdata):
-	# Characters used for printing the map to the shell
+	# Characters used for printing map data to the shell
 	chars = {'0':'  ', '1':'██'}
 
 	for y in range(map_min, map_max+1):
@@ -19,7 +19,7 @@ def show_map(passdata):
 
 		print(lineout)
 
-	print('═' * ((abs(map_min) + map_max) * 2))
+	print('═' * ((abs(map_min) + map_max) * 2 + 2))
 
 def initial_rng():
 	return random.randrange(0, 2)
