@@ -1,28 +1,29 @@
 import random
-#random.seed(1337)
+
+# Configuration
+revtend = -3 # Value added to the checksum in revision
+outskirts = 0 # Value given to locations out of render dimensions
+map_min = -16 # Minimum coordinate (map dimensions)
+map_max = 16 # Maximum coordinate (map dimensions)
+#random.seed(1337) # Seed for rng
 
 mapdata = {}
 
-# Map dimensions
-map_min = -16
-map_max = 16
-
-
 def show_map(passdata):
 	# Characters used for printing map data to the shell
-	chars = {'0':'  ', '1':'██'}
+	chars = {'0.0':'  ', '0.1':'░░', '0.2':'░░', '0.3':'▒▒',  '0.4':'▒▒', '0.5':'▒▒', '0.6':'▒▒', '0.7':'▓▓', '0.8':'▓▓', '0.9':'██', '1.0':'██'}
 
 	for y in range(map_min, map_max+1):
 		lineout = ''
 		for x in range(map_min, map_max+1):
-			lineout = lineout+chars[str(passdata[str(x)+'|'+str(y*-1)])]
+			lineout = lineout+chars[str(abs(round(passdata[str(x)+'|'+str(y*-1)], 1)))]
 
 		print(lineout)
 
 	print('═' * ((abs(map_min) + map_max) * 2 + 2))
 
 def initial_rng():
-	return random.randrange(0, 2)
+	return round(random.random(), 3)
 
 def revise(passdata):
 	revmap = {}
@@ -39,12 +40,17 @@ def revise(passdata):
 						# 0 emulates water, 1 emulates land around the map
 						checksum = checksum + 0
 
-			if checksum < 4:
-				revmap[str(x)+'|'+str(y)] = 0
-			elif checksum > 4:
-				revmap[str(x)+'|'+str(y)] = 1
-			else:
-				revmap[str(x)+'|'+str(y)] = passdata[str(x)+'|'+str(y)]
+			passvalue = passdata[str(x)+'|'+str(y)]
+			revvalue = passvalue * (checksum+revtend)
+
+			# Not happy with solution below, needs improvement
+			if revvalue > 1:
+				revvalue = 1.0
+			elif revvalue < 0:
+				revvalue = 0.0
+
+			revmap[str(x)+'|'+str(y)] = revvalue
+
 	return revmap
 
 # Generate the noisemap
@@ -64,5 +70,5 @@ show_map(revision1)
 revision2 = revise(revision1)
 show_map(revision2)
 
-revision3 = revise(revision2)
-show_map(revision3)
+#revision3 = revise(revision2)
+#show_map(revision3)
